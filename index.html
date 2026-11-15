@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>光影小畫家 - 主題圖案蓋印與自由畫板</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #E8EEF5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang HK", "Microsoft JhengHei", sans-serif;
+    }
+
+    #app-layout {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      padding: 12px;
+      gap: 14px;
+    }
+
+    /* === 左側工具欄（畫筆 ＋ 主題分頁 ＋ 圖案蓋印）=== */
+    #left-sidebar {
+      width: 245px;
+      min-width: 225px;
+      background-color: #1E2532;
+      border-radius: 24px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .sidebar-section-title {
+      color: #FFD60A;
+      font-size: 1rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    /* 畫筆顏色按鈕列 */
+    .brush-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .brush-btn {
+      height: 48px;
+      border-radius: 14px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      background-color: #2C3545;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .brush-btn .color-dot {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #FFFFFF;
+    }
+
+    .brush-btn.active {
+      border-color: #FFD60A;
+      background-color: #384459;
+      transform: scale(1.06);
+      box-shadow: 0 0 14px rgba(255, 214, 10, 0.75);
+    }
+
+    .divider-line {
+      height: 2px;
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+
+    /* 主題分類分頁按鈕 */
+    .category-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .cat-tab-btn {
+      background-color: #2C3545;
+      color: #E2E8F0;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 7px 4px;
+      font-size: 0.88rem;
+      font-weight: 900;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cat-tab-btn.active {
+      background-color: #FFD60A;
+      color: #000000;
+      border-color: #FFD60A;
+    }
+
+    /* 圖案蓋印網格 */
+    .stamps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      flex: 1;
+      overflow-y: auto;
+      align-content: start;
+      padding-right: 2px;
+    }
+
+    .stamp-btn {
+      background-color: #2C3545;
+      border: 3px solid rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
+      padding: 7px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .stamp-btn .stamp-emoji {
+      font-size: 2.25rem;
+      line-height: 1.1;
+    }
+
+    .stamp-btn .stamp-label {
+      color: #FFFFFF;
+      font-size: 0.88rem;
+      font-weight: 800;
+      margin-top: 3px;
+    }
+
+    .stamp-btn.active {
+      border-color: #00FF66;
+      background-color: #1F4732;
+      transform: scale(1.04);
+      box-shadow: 0 0 16px rgba(0, 255, 102, 0.65);
+    }
+
+    /* === 右側主畫板區 === */
+    #right-workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    /* 頂部控制欄（換畫紙底色 ＋ 還原 ＋ 清空） */
+    #top-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #FFFFFF;
+      border-radius: 20px;
+      padding: 10px 18px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .bg-picker-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .bg-picker-label {
+      font-size: 1.02rem;
+      font-weight: 900;
+      color: #1E2532;
+    }
+
+    .bg-swatch {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 3px solid #99A3B0;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    .bg-swatch.active {
+      border: 4px solid #0055FF;
+      transform: scale(1.14);
+      box-shadow: 0 0 12px rgba(0, 85, 255, 0.45);
+    }
+
+    #current-tool-banner {
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #003380;
+      background: #EBF3FF;
+      padding: 8px 16px;
+      border-radius: 16px;
+      white-space: nowrap;
+    }
+
+    .action-btns-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tool-action-btn {
+      border: none;
+      border-radius: 16px;
+      padding: 10px 18px;
+      font-size: 1.08rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .tool-action-btn:active {
+      transform: scale(0.95);
+    }
+
+    #undo-btn {
+      background-color: #FFCC00;
+      color: #000000;
+    }
+
+    #clear-btn {
+      background-color: #FF453A;
+      color: #FFFFFF;
+    }
+
+    /* 畫布外框 */
+    #canvas-wrapper {
+      flex: 1;
+      border-radius: 26px;
+      border: 6px solid #1E2532;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+      background-color: #FAF8F2;
+    }
+
+    #draw-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    #audio-unlock-toast {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(30, 37, 50, 0.9);
+      color: #FFD60A;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-layout">
+    <!-- 左側工具欄：畫筆顏色 ＋ 主題分類 ＋ 圖案蓋印 -->
+    <div id="left-sidebar">
+      <div class="sidebar-section-title">🖌️ 揀畫筆</div>
+      <div class="brush-row" id="brush-list">
+        <button type="button" class="brush-btn active" data-color="#E62E2D" data-name="紅色畫筆">
+          <div class="color-dot" style="background:#E62E2D;"></div>
+        </button>
+        <button type="button" class="brush-btn" data-color="#0066FF" data-name="藍色畫筆">
+          <div class="color-dot" style="background:#0066FF;"></div>
+        </button>
+        <button type="button" class="brush-btn" data-color="#00A843" data-name="綠色畫筆">
+          <div class="color-dot" style="background:#00A843;"></div>
+        </button>
+        <button type="button" class="brush-btn" data-color="#FFB800" data-name="黃色畫筆">
+          <div class="color-dot" style="background:#FFB800;"></div>
+        </button>
+      </div>
+
+      <div class="divider-line"></div>
+
+      <div class="sidebar-section-title">🪄 揀主題圖案蓋印</div>
+      <div class="category-tabs" id="category-tabs">
+        <button type="button" class="cat-tab-btn active" data-cat="common">🌟 常用</button>
+        <button type="button" class="cat-tab-btn" data-cat="christmas">🎄 聖誕</button>
+        <button type="button" class="cat-tab-btn" data-cat="animals">🐶 動物</button>
+        <button type="button" class="cat-tab-btn" data-cat="food_car">🍎 生活</button>
+      </div>
+
+      <div class="stamps-grid" id="stamps-list"></div>
+    </div>
+
+    <!-- 右側主畫板區 -->
+    <div id="right-workspace">
+      <div id="top-toolbar">
+        <div class="bg-picker-group">
+          <span class="bg-picker-label">🎨 畫紙底色：</span>
+          <button type="button" class="bg-swatch active" data-bg="#FAF8F2" title="柔和米白" style="background:#FAF8F2;"></button>
+          <button type="button" class="bg-swatch" data-bg="#DCEEFF" title="護眼淺藍" style="background:#DCEEFF;"></button>
+          <button type="button" class="bg-swatch" data-bg="#FFF6CC" title="溫暖淺黃" style="background:#FFF6CC;"></button>
+          <button type="button" class="bg-swatch" data-bg="#1B2A4A" title="深藍夜空" style="background:#1B2A4A;"></button>
+        </div>
+
+        <div id="current-tool-banner">🖌️ 正在用：紅色畫筆</div>
+
+        <div class="action-btns-group">
+          <button type="button" class="tool-action-btn" id="undo-btn">↩️ 還原</button>
+          <button type="button" class="tool-action-btn" id="clear-btn">🗑️ 清空</button>
+        </div>
+      </div>
+
+      <div id="canvas-wrapper">
+        <canvas id="draw-canvas"></canvas>
+        <div id="audio-unlock-toast">👆 直接在畫板畫畫，或點左邊圖案蓋印！</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === 4 大主題 WhatsApp 豐富圖案庫（共 32 款）===
+    const STAMP_CATEGORIES = {
+      common: [
+        { emoji: '⭐', name: '星星' },
+        { emoji: '❤️', name: '心心' },
+        { emoji: '😊', name: '笑臉' },
+        { emoji: '☀️', name: '太陽' },
+        { emoji: '🌸', name: '花朵' },
+        { emoji: '🌈', name: '彩虹' },
+        { emoji: '🎈', name: '氣球' },
+        { emoji: '🎵', name: '音樂' }
+      ],
+      christmas: [
+        { emoji: '🎄', name: '聖誕樹' },
+        { emoji: '🎅', name: '聖誕老人' },
+        { emoji: '⛄', name: '雪人' },
+        { emoji: '🎁', name: '禮物' },
+        { emoji: '❄️', name: '雪花' },
+        { emoji: '🦌', name: '麋鹿' },
+        { emoji: '🔔', name: '聖誕鐘' },
+        { emoji: '🍬', name: '糖果' }
+      ],
+      animals: [
+        { emoji: '🐶', name: '小狗' },
+        { emoji: '🐱', name: '小貓' },
+        { emoji: '🐰', name: '兔仔' },
+        { emoji: '🐻', name: '熊仔' },
+        { emoji: '🦋', name: '蝴蝶' },
+        { emoji: '🐠', name: '魚仔' },
+        { emoji: '🐤', name: '小鳥' },
+        { emoji: '🐢', name: '烏龜' }
+      ],
+      food_car: [
+        { emoji: '🍎', name: '蘋果' },
+        { emoji: '🍓', name: '士多啤梨' },
+        { emoji: '🎂', name: '蛋糕' },
+        { emoji: '🍦', name: '雪糕' },
+        { emoji: '🚗', name: '汽車' },
+        { emoji: '🚌', name: '巴士' },
+        { emoji: '✈️', name: '飛機' },
+        { emoji: '🚀', name: '火箭' }
+      ]
+    };
+
+    const canvas = document.getElementById('draw-canvas');
+    const ctx = canvas.getContext('2d');
+    const canvasWrapper = document.getElementById('canvas-wrapper');
+    const currentToolBanner = document.getElementById('current-tool-banner');
+    const unlockToast = document.getElementById('audio-unlock-toast');
+    const stampsListEl = document.getElementById('stamps-list');
+
+    // === 畫板狀態 ===
+    const appState = {
+      mode: 'brush', // 'brush' | 'stamp'
+      activeCategory: 'common',
+      brushColor: '#E62E2D',
+      brushName: '紅色畫筆',
+      brushSize: 18,
+      stampEmoji: '⭐',
+      stampName: '星星',
+      stampSize: 96,
+      bgColor: '#FAF8F2',
+      history: []
+    };
+
+    let isDrawing = false;
+    let currentStroke = null;
+    let lastStampTime = 0;
+    let lastStampPos = { x: -999, y: -999 };
+    let audioUnlocked = false;
+
+    // === Web Audio API 輕快音效 ===
+    let audioCtx = null;
+
+    function unlockAudioAndSpeech() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      if (!audioUnlocked) {
+        audioUnlocked = true;
+        unlockToast.style.opacity = '0';
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+        }
+      }
+    }
+
+    function playStampPopSound() {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.18);
+    }
+
+    // === 廣東話語音提示 ===
+    let cantoneseVoice = null;
+    let speechTimer = null;
+
+    function loadCantoneseVoice() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      cantoneseVoice =
+        voices.find(v => v.lang === 'zh-HK' || v.lang === 'zh_HK') ||
+        voices.find(v => v.lang.toLowerCase().includes('hk') || v.name.toLowerCase().includes('cantonese') || v.name.includes('粵語') || v.name.includes('廣東話')) ||
+        null;
+    }
+
+    if ('speechSynthesis' in window) {
+      loadCantoneseVoice();
+      window.speechSynthesis.onvoiceschanged = loadCantoneseVoice;
+    }
+
+    function speakCantonese(text) {
+      if (!('speechSynthesis' in window) || !text) return;
+      if (speechTimer) clearTimeout(speechTimer);
+      window.speechSynthesis.cancel();
+      speechTimer = setTimeout(() => {
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+        const utter = new SpeechSynthesisUtterance(String(text));
+        utter.lang = 'zh-HK';
+        if (cantoneseVoice) utter.voice = cantoneseVoice;
+        utter.rate = 0.88;
+        utter.pitch = 1.15;
+        window.speechSynthesis.speak(utter);
+      }, 50);
+    }
+
+    // === 渲染左側目前主題的圖案按鈕 ===
+    function renderStampButtons() {
+      stampsListEl.innerHTML = '';
+      const list = STAMP_CATEGORIES[appState.activeCategory] || STAMP_CATEGORIES.common;
+
+      list.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isSelected = (appState.mode === 'stamp' && appState.stampEmoji === item.emoji);
+        btn.className = 'stamp-btn' + (isSelected ? ' active' : '');
+        btn.innerHTML = `
+          <span class="stamp-emoji">${item.emoji}</span>
+          <span class="stamp-label">${item.name}</span>
+        `;
+
+        btn.addEventListener('click', () => {
+          unlockAudioAndSpeech();
+          document.querySelectorAll('.brush-btn').forEach(b => b.classList.remove('active'));
+          appState.mode = 'stamp';
+          appState.stampEmoji = item.emoji;
+          appState.stampName = item.name;
+          renderStampButtons();
+          currentToolBanner.textContent = `${item.emoji} 蓋印圖案：${item.name}`;
+          speakCantonese(item.name);
+        });
+
+        stampsListEl.appendChild(btn);
+      });
+    }
+
+    // === 主題分類切換 ===
+    document.querySelectorAll('.cat-tab-btn').forEach(tab => {
+      tab.addEventListener('click', () => {
+        unlockAudioAndSpeech();
+        document.querySelectorAll('.cat-tab-btn').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        appState.activeCategory = tab.dataset.cat;
+        renderStampButtons();
+      });
+    });
+
+    // === 畫布尺寸自適應與重繪 ===
+    function resizeCanvas() {
+      const rect = canvasWrapper.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * dpr);
+      canvas.height = Math.floor(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      redrawAll();
+    }
+
+    function redrawAll() {
+      const rect = canvasWrapper.getBoundingClientRect();
+      ctx.fillStyle = appState.bgColor;
+      ctx.fillRect(0, 0, rect.width, rect.height);
+
+      for (const item of appState.history) {
+        if (item.type === 'stroke') {
+          drawStrokePath(item);
+        } else if (item.type === 'stamp') {
+          drawStampItem(item);
+        }
+      }
+    }
+
+    function drawStrokePath(stroke) {
+      if (!stroke.points || stroke.points.length === 0) return;
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = stroke.color;
+      ctx.lineWidth = stroke.size;
+
+      ctx.beginPath();
+      if (stroke.points.length === 1) {
+        ctx.arc(stroke.points[0].x, stroke.points[0].y, stroke.size / 2, 0, Math.PI * 2);
+        ctx.fillStyle = stroke.color;
+        ctx.fill();
+      } else {
+        ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+        for (let i = 1; i < stroke.points.length; i++) {
+          ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function drawStampItem(stamp) {
+      ctx.save();
+      ctx.font = `${stamp.size}px "Apple Color Emoji", "Segoe UI Emoji", sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(stamp.emoji, stamp.x, stamp.y);
+      ctx.restore();
+    }
+
+    // === 畫板觸控與滑鼠繪畫 / 蓋印事件 ===
+    function getCanvasPoint(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function placeStampAt(pt) {
+      const stampAction = {
+        type: 'stamp',
+        emoji: appState.stampEmoji,
+        x: pt.x,
+        y: pt.y,
+        size: appState.stampSize
+      };
+      appState.history.push(stampAction);
+      drawStampItem(stampAction);
+      playStampPopSound();
+      if (navigator.vibrate) navigator.vibrate(35);
+
+      lastStampTime = Date.now();
+      lastStampPos = pt;
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      unlockAudioAndSpeech();
+      canvas.setPointerCapture(e.pointerId);
+      const pt = getCanvasPoint(e);
+
+      if (appState.mode === 'brush') {
+        isDrawing = true;
+        currentStroke = {
+          type: 'stroke',
+          color: appState.brushColor,
+          size: appState.brushSize,
+          points: [pt]
+        };
+        appState.history.push(currentStroke);
+        drawStrokePath(currentStroke);
+      } else if (appState.mode === 'stamp') {
+        isDrawing = true;
+        placeStampAt(pt);
+        speakCantonese(appState.stampName);
+      }
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const pt = getCanvasPoint(e);
+
+      if (appState.mode === 'brush' && currentStroke) {
+        const prev = currentStroke.points[currentStroke.points.length - 1];
+        currentStroke.points.push(pt);
+
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = currentStroke.color;
+        ctx.lineWidth = currentStroke.size;
+        ctx.beginPath();
+        ctx.moveTo(prev.x, prev.y);
+        ctx.lineTo(pt.x, pt.y);
+        ctx.stroke();
+        ctx.restore();
+      } else if (appState.mode === 'stamp') {
+        const dist = Math.hypot(pt.x - lastStampPos.x, pt.y - lastStampPos.y);
+        if (dist >= 88 && Date.now() - lastStampTime >= 140) {
+          placeStampAt(pt);
+        }
+      }
+    });
+
+    const stopDrawing = () => {
+      isDrawing = false;
+      currentStroke = null;
+    };
+
+    canvas.addEventListener('pointerup', stopDrawing);
+    canvas.addEventListener('pointercancel', stopDrawing);
+
+    // === 左側畫筆選擇事件 ===
+    document.querySelectorAll('.brush-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        unlockAudioAndSpeech();
+        document.querySelectorAll('.brush-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        appState.mode = 'brush';
+        appState.brushColor = btn.dataset.color;
+        appState.brushName = btn.dataset.name;
+        renderStampButtons();
+        currentToolBanner.textContent = `🖌️ 正在用：${appState.brushName}`;
+        speakCantonese(appState.brushName);
+      });
+    });
+
+    // === 頂部畫紙底色切換 ===
+    document.querySelectorAll('.bg-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        unlockAudioAndSpeech();
+        document.querySelectorAll('.bg-swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+
+        appState.bgColor = swatch.dataset.bg;
+        redrawAll();
+      });
+    });
+
+    // === 還原上一步 & 清空畫板 ===
+    document.getElementById('undo-btn').addEventListener('click', () => {
+      unlockAudioAndSpeech();
+      if (appState.history.length > 0) {
+        appState.history.pop();
+        redrawAll();
+      }
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      unlockAudioAndSpeech();
+      if (appState.history.length === 0) return;
+      appState.history = [];
+      redrawAll();
+      speakCantonese('畫板清空啦！');
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+    renderStampButtons();
+    resizeCanvas();
+  </script>
+</body>
+</html>
