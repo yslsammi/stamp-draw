@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>光影小畫家 - 主題圖案蓋印與自由畫板</title>
+  <title>光影小畫家 - 螢光聲效畫板與豐富主題蓋印</title>
   <style>
     * {
       box-sizing: border-box;
@@ -35,14 +35,14 @@
 
     /* === 左側工具欄（畫筆 ＋ 主題分頁 ＋ 圖案蓋印）=== */
     #left-sidebar {
-      width: 248px;
-      min-width: 228px;
+      width: 262px;
+      min-width: 240px;
       background-color: #1E2532;
       border-radius: 24px;
       padding: 11px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 8px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
     }
 
@@ -55,7 +55,7 @@
 
     .sidebar-section-title {
       color: #FFD60A;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 900;
       letter-spacing: 0.5px;
     }
@@ -65,33 +65,36 @@
       color: #00E5FF;
       border: 2px solid #00E5FF;
       border-radius: 10px;
-      padding: 4px 9px;
-      font-size: 0.8rem;
+      padding: 4px 8px;
+      font-size: 0.78rem;
       font-weight: 900;
       cursor: pointer;
+      white-space: nowrap;
     }
 
     .size-toggle-btn:active {
       transform: scale(0.94);
     }
 
-    /* 畫筆顏色按鈕列（含彩虹筆） */
+    /* 畫筆顏色按鈕列（2 排共 8 枝：4 鮮明色 ＋ 3 螢光色 ＋ 1 彩虹筆） */
     .brush-row {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
     }
 
     .brush-btn {
       height: 44px;
       border-radius: 12px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
+      border: 3px solid rgba(255, 255, 255, 0.28);
       background-color: #2C3545;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       padding: 0;
+      position: relative;
       transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
@@ -102,6 +105,20 @@
       border: 2px solid #FFFFFF;
     }
 
+    .brush-btn.neon-btn .color-dot {
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .neon-badge {
+      position: absolute;
+      bottom: 1px;
+      right: 3px;
+      font-size: 0.62rem;
+      font-weight: 900;
+      color: #FFFF00;
+      text-shadow: 0 1px 2px #000;
+    }
+
     .rainbow-dot {
       background: conic-gradient(#FF2A2A, #FF9900, #FFEE00, #00D94A, #0088FF, #A64DFF, #FF2A2A);
     }
@@ -109,8 +126,8 @@
     .brush-btn.active {
       border-color: #FFD60A;
       background-color: #384459;
-      transform: scale(1.08);
-      box-shadow: 0 0 12px rgba(255, 214, 10, 0.8);
+      transform: scale(1.07);
+      box-shadow: 0 0 12px rgba(255, 214, 10, 0.85);
     }
 
     .divider-line {
@@ -119,23 +136,24 @@
       border-radius: 2px;
     }
 
-    /* 主題分類分頁按鈕 */
+    /* 5 大主題分類分頁按鈕 */
     .category-tabs {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
     }
 
     .cat-tab-btn {
       background-color: #2C3545;
       color: #E2E8F0;
       border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 6px 4px;
-      font-size: 0.86rem;
+      border-radius: 10px;
+      padding: 6px 2px;
+      font-size: 0.82rem;
       font-weight: 900;
       cursor: pointer;
       text-align: center;
+      white-space: nowrap;
     }
 
     .cat-tab-btn.active {
@@ -169,13 +187,13 @@
     }
 
     .stamp-btn .stamp-emoji {
-      font-size: 2.15rem;
+      font-size: 2.1rem;
       line-height: 1.1;
     }
 
     .stamp-btn .stamp-label {
       color: #FFFFFF;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 800;
       margin-top: 2px;
     }
@@ -196,7 +214,7 @@
       min-width: 0;
     }
 
-    /* 頂部控制欄（畫紙場景 ＋ 還原 ＋ 清空 ＋ 完成啦音樂慶祝） */
+    /* 頂部控制欄（8 款畫紙場景 ＋ 還原 ＋ 清空 ＋ 完成啦音樂慶祝） */
     #top-toolbar {
       display: flex;
       align-items: center;
@@ -212,41 +230,42 @@
     .bg-picker-group {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     .bg-picker-label {
-      font-size: 0.96rem;
+      font-size: 0.94rem;
       font-weight: 900;
       color: #1E2532;
     }
 
     .bg-swatch {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       border: 3px solid #99A3B0;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.15rem;
+      font-size: 1.08rem;
       padding: 0;
       transition: transform 0.15s ease, border-color 0.2s ease;
     }
 
     .bg-swatch.active {
       border: 4px solid #0055FF;
-      transform: scale(1.14);
-      box-shadow: 0 0 12px rgba(0, 85, 255, 0.45);
+      transform: scale(1.15);
+      box-shadow: 0 0 12px rgba(0, 85, 255, 0.55);
     }
 
     #current-tool-banner {
-      font-size: 1.08rem;
+      font-size: 1.04rem;
       font-weight: 900;
       color: #003380;
       background: #EBF3FF;
-      padding: 7px 14px;
+      padding: 6px 12px;
       border-radius: 14px;
       white-space: nowrap;
     }
@@ -254,14 +273,14 @@
     .action-btns-group {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
     }
 
     .tool-action-btn {
       border: none;
       border-radius: 15px;
-      padding: 9px 15px;
-      font-size: 1.02rem;
+      padding: 8px 14px;
+      font-size: 1rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
@@ -289,8 +308,8 @@
       background: linear-gradient(135deg, #00D94A, #00A838);
       color: #FFFFFF;
       border: 2px solid #004D1A;
-      font-size: 1.12rem;
-      padding: 9px 18px;
+      font-size: 1.08rem;
+      padding: 8px 16px;
       box-shadow: 0 4px 14px rgba(0, 200, 70, 0.45);
     }
 
@@ -317,11 +336,11 @@
       bottom: 18px;
       left: 50%;
       transform: translateX(-50%);
-      background-color: rgba(30, 37, 50, 0.9);
+      background-color: rgba(30, 37, 50, 0.92);
       color: #FFD60A;
       padding: 10px 24px;
       border-radius: 20px;
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       font-weight: 800;
       pointer-events: none;
       transition: opacity 0.4s ease;
@@ -439,7 +458,6 @@
       color: #000000;
     }
 
-    /* 慶祝煙花粒子 */
     .firework-dot {
       position: absolute;
       border-radius: 50%;
@@ -451,26 +469,41 @@
 <body>
 
   <div id="app-layout">
-    <!-- 左側工具欄：畫筆顏色 ＋ 主題分類 ＋ 圖案蓋印 -->
+    <!-- 左側工具欄：畫筆顏色（含螢光筆）＋ 5 大主題圖案蓋印 -->
     <div id="left-sidebar">
       <div class="sidebar-header-row">
-        <span class="sidebar-section-title">🖌️ 揀畫筆</span>
+        <span class="sidebar-section-title">🖌️ 揀畫筆（⚡螢光）</span>
         <button type="button" class="size-toggle-btn" id="brush-size-btn">筆粗：特粗</button>
       </div>
       <div class="brush-row" id="brush-list">
-        <button type="button" class="brush-btn active" data-color="#E62E2D" data-name="紅色畫筆">
+        <!-- 第一行：4 隻鮮明色 -->
+        <button type="button" class="brush-btn active" data-color="#E62E2D" data-neon="false" data-name="紅色畫筆">
           <div class="color-dot" style="background:#E62E2D;"></div>
         </button>
-        <button type="button" class="brush-btn" data-color="#0066FF" data-name="藍色畫筆">
+        <button type="button" class="brush-btn" data-color="#0066FF" data-neon="false" data-name="藍色畫筆">
           <div class="color-dot" style="background:#0066FF;"></div>
         </button>
-        <button type="button" class="brush-btn" data-color="#00A843" data-name="綠色畫筆">
+        <button type="button" class="brush-btn" data-color="#00A843" data-neon="false" data-name="綠色畫筆">
           <div class="color-dot" style="background:#00A843;"></div>
         </button>
-        <button type="button" class="brush-btn" data-color="#FFB800" data-name="黃色畫筆">
-          <div class="color-dot" style="background:#FFB800;"></div>
+        <button type="button" class="brush-btn" data-color="#FF9500" data-neon="false" data-name="橙色畫筆">
+          <div class="color-dot" style="background:#FF9500;"></div>
         </button>
-        <button type="button" class="brush-btn" data-color="rainbow" data-name="彩虹變色筆" title="彩虹魔法筆">
+
+        <!-- 第二行：3 隻高對比螢光發光筆 ＋ 1 隻彩虹筆 -->
+        <button type="button" class="brush-btn neon-btn" data-color="#FFFF00" data-neon="true" data-name="螢光黃畫筆" title="高對比螢光黃">
+          <div class="color-dot" style="background:#FFFF00; color:#FFFF00;"></div>
+          <span class="neon-badge">⚡</span>
+        </button>
+        <button type="button" class="brush-btn neon-btn" data-color="#00FF66" data-neon="true" data-name="螢光綠畫筆" title="高對比螢光綠">
+          <div class="color-dot" style="background:#00FF66; color:#00FF66;"></div>
+          <span class="neon-badge">⚡</span>
+        </button>
+        <button type="button" class="brush-btn neon-btn" data-color="#FF2A85" data-neon="true" data-name="螢光粉紅畫筆" title="高對比螢光粉紅">
+          <div class="color-dot" style="background:#FF2A85; color:#FF2A85;"></div>
+          <span class="neon-badge">⚡</span>
+        </button>
+        <button type="button" class="brush-btn" data-color="rainbow" data-neon="true" data-name="彩虹變色筆" title="彩虹魔法筆">
           <div class="color-dot rainbow-dot"></div>
         </button>
       </div>
@@ -478,13 +511,14 @@
       <div class="divider-line"></div>
 
       <div class="sidebar-header-row">
-        <span class="sidebar-section-title">🪄 揀圖案蓋印</span>
+        <span class="sidebar-section-title">🪄 主題蓋印（50款）</span>
         <button type="button" class="size-toggle-btn" id="stamp-size-btn">圖案：特大</button>
       </div>
       <div class="category-tabs" id="category-tabs">
         <button type="button" class="cat-tab-btn active" data-cat="common">🌟 常用</button>
         <button type="button" class="cat-tab-btn" data-cat="christmas">🎄 聖誕</button>
         <button type="button" class="cat-tab-btn" data-cat="animals">🐶 動物</button>
+        <button type="button" class="cat-tab-btn" data-cat="ocean">🌊 海洋</button>
         <button type="button" class="cat-tab-btn" data-cat="food_car">🍎 生活</button>
       </div>
 
@@ -499,8 +533,11 @@
           <button type="button" class="bg-swatch active" data-bg="cream" title="柔和米白" style="background:#FAF8F2;"></button>
           <button type="button" class="bg-swatch" data-bg="skyblue" title="護眼淺藍" style="background:#DCEEFF;"></button>
           <button type="button" class="bg-swatch" data-bg="warmyellow" title="溫暖淺黃" style="background:#FFF6CC;"></button>
+          <button type="button" class="bg-swatch" data-bg="black_hc" title="深黑高對比（配螢光筆）" style="background:#0B0E14; color:#FFFF00;">⚡</button>
           <button type="button" class="bg-swatch" data-bg="scene_xmas" title="聖誕雪夜場景" style="background:linear-gradient(180deg,#102040 65%,#EBF5FF 65%);">🎄</button>
           <button type="button" class="bg-swatch" data-bg="scene_park" title="草地藍天場景" style="background:linear-gradient(180deg,#87CEEB 65%,#7EC850 65%);">🌳</button>
+          <button type="button" class="bg-swatch" data-bg="scene_ocean" title="海底世界場景" style="background:linear-gradient(180deg,#006994 70%,#F2D184 70%);">🌊</button>
+          <button type="button" class="bg-swatch" data-bg="scene_space" title="星空宇宙場景" style="background:#141836;">🌌</button>
         </div>
 
         <div id="current-tool-banner">🖌️ 紅色畫筆</div>
@@ -514,7 +551,7 @@
 
       <div id="canvas-wrapper">
         <canvas id="draw-canvas"></canvas>
-        <div id="audio-unlock-toast">👆 直接在畫板畫畫，或點左邊圖案蓋印，畫好按「🎉 完成啦！」聽音樂！</div>
+        <div id="audio-unlock-toast">👆 用手指畫畫會一路響出音樂聲效，也可以點左邊圖案蓋印！</div>
 
         <!-- 完成畫作音樂慶祝遮罩 -->
         <div id="celebrate-overlay">
@@ -540,7 +577,7 @@
   </div>
 
   <script>
-    // === 4 大主題 WhatsApp 豐富圖案庫（共 32 款）===
+    // === 5 大主題 WhatsApp 豐富圖案庫（共 50 款）===
     const STAMP_CATEGORIES = {
       common: [
         { emoji: '⭐', name: '星星' },
@@ -550,7 +587,9 @@
         { emoji: '🌸', name: '花朵' },
         { emoji: '🌈', name: '彩虹' },
         { emoji: '🎈', name: '氣球' },
-        { emoji: '🎵', name: '音樂' }
+        { emoji: '🎵', name: '音樂' },
+        { emoji: '👑', name: '皇冠' },
+        { emoji: '💎', name: '鑽石' }
       ],
       christmas: [
         { emoji: '🎄', name: '聖誕樹' },
@@ -560,7 +599,9 @@
         { emoji: '❄️', name: '雪花' },
         { emoji: '🦌', name: '麋鹿' },
         { emoji: '🔔', name: '聖誕鐘' },
-        { emoji: '🍬', name: '糖果' }
+        { emoji: '🍬', name: '糖果' },
+        { emoji: '🧦', name: '聖誕襪' },
+        { emoji: '🕯️', name: '蠟燭' }
       ],
       animals: [
         { emoji: '🐶', name: '小狗' },
@@ -568,17 +609,33 @@
         { emoji: '🐰', name: '兔仔' },
         { emoji: '🐻', name: '熊仔' },
         { emoji: '🦋', name: '蝴蝶' },
-        { emoji: '🐠', name: '魚仔' },
         { emoji: '🐤', name: '小鳥' },
-        { emoji: '🐢', name: '烏龜' }
+        { emoji: '🐼', name: '熊貓' },
+        { emoji: '🦁', name: '獅子' },
+        { emoji: '🐘', name: '大象' },
+        { emoji: '🐸', name: '青蛙' }
+      ],
+      ocean: [
+        { emoji: '🐬', name: '海豚' },
+        { emoji: '🐳', name: '鯨魚' },
+        { emoji: '🐠', name: '熱帶魚' },
+        { emoji: '🐙', name: '八爪魚' },
+        { emoji: '🦀', name: '螃蟹' },
+        { emoji: '🐢', name: '海龜' },
+        { emoji: '🐚', name: '貝殼' },
+        { emoji: '🪼', name: '水母' },
+        { emoji: '⛵', name: '帆船' },
+        { emoji: '🏝️', name: '小島' }
       ],
       food_car: [
         { emoji: '🍎', name: '蘋果' },
         { emoji: '🍓', name: '士多啤梨' },
+        { emoji: '🍌', name: '香蕉' },
         { emoji: '🎂', name: '蛋糕' },
         { emoji: '🍦', name: '雪糕' },
         { emoji: '🚗', name: '汽車' },
         { emoji: '🚌', name: '巴士' },
+        { emoji: '🚒', name: '消防車' },
         { emoji: '✈️', name: '飛機' },
         { emoji: '🚀', name: '火箭' }
       ]
@@ -597,11 +654,12 @@
       mode: 'brush', // 'brush' | 'stamp'
       activeCategory: 'common',
       brushColor: '#E62E2D',
+      isNeon: false,
       brushName: '紅色畫筆',
       brushSize: 22, // 22 (特粗) | 10 (普通)
       stampEmoji: '⭐',
       stampName: '星星',
-      stampSize: 108, // 108 (特大) | 66 (標準)
+      stampSize: 108, // 108 (特大) | 68 (標準)
       bgStyle: 'cream',
       history: []
     };
@@ -611,9 +669,11 @@
     let rainbowHue = 0;
     let lastStampTime = 0;
     let lastStampPos = { x: -999, y: -999 };
+    let lastStrokeSoundTime = 0;
+    let strokeStepIndex = 0;
     let audioUnlocked = false;
 
-    // === Web Audio API 音效與童趣旋律播放器 ===
+    // === Web Audio API 邊畫邊響聲效與童趣旋律播放器 ===
     let audioCtx = null;
     let songTimers = [];
 
@@ -654,6 +714,35 @@
       osc.stop(now + duration);
     }
 
+    // 畫筆滑動時的魔法風鈴聲效（隨高度與步進變化音高，聽起來像音樂琴鍵）
+    const BRUSH_SCALE = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51];
+
+    function playBrushSparkleSound(yPos, canvasHeight) {
+      if (!audioCtx) return;
+      const nowMs = Date.now();
+      if (nowMs - lastStrokeSoundTime < 75) return; // 控制發音節奏不刺耳
+      lastStrokeSoundTime = nowMs;
+
+      // 結合手指上下位置（越往上音越高）與流動音階
+      const normY = Math.max(0, Math.min(1, 1 - (yPos / Math.max(1, canvasHeight))));
+      const heightIdx = Math.floor(normY * (BRUSH_SCALE.length - 1));
+      const scaleIdx = (heightIdx + (strokeStepIndex % 3)) % BRUSH_SCALE.length;
+      strokeStepIndex += 1;
+
+      const freq = BRUSH_SCALE[scaleIdx];
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = appState.isNeon ? 'sine' : 'triangle';
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.11, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.16);
+    }
+
     function playStampPopSound() {
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
@@ -670,11 +759,10 @@
       osc.stop(now + 0.18);
     }
 
-    // 內置三首輕快童趣旋律（音高頻率 Hz 與拍子毫秒）
+    // 內置三首輕快童趣旋律
     const NOTES = {
       C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
-      G4: 392.00, A4: 440.00, B4: 493.88, C5: 523.25,
-      D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99
+      G4: 392.00, A4: 440.00, B4: 493.88, C5: 523.25
     };
 
     const SONGS = {
@@ -756,9 +844,7 @@
         if (cantoneseVoice) utter.voice = cantoneseVoice;
         utter.rate = 0.88;
         utter.pitch = 1.15;
-        if (onFinished) {
-          utter.onend = onFinished;
-        }
+        if (onFinished) utter.onend = onFinished;
         window.speechSynthesis.speak(utter);
       }, 50);
     }
@@ -829,7 +915,7 @@
       }
     });
 
-    // === 畫布底色與情境背景繪製 ===
+    // === 8 款畫布底色與情境背景繪製 ===
     function drawBackgroundLayer(w, h) {
       if (appState.bgStyle === 'cream') {
         ctx.fillStyle = '#FAF8F2';
@@ -840,11 +926,14 @@
       } else if (appState.bgStyle === 'warmyellow') {
         ctx.fillStyle = '#FFF6CC';
         ctx.fillRect(0, 0, w, h);
+      } else if (appState.bgStyle === 'black_hc') {
+        // 深黑高對比背景（最適合配合螢光畫筆）
+        ctx.fillStyle = '#0B0E14';
+        ctx.fillRect(0, 0, w, h);
       } else if (appState.bgStyle === 'scene_xmas') {
         // 聖誕雪地夜空場景
         ctx.fillStyle = '#132442';
         ctx.fillRect(0, 0, w, h);
-        // 柔和雪地斜坡
         ctx.fillStyle = '#EAF4FC';
         ctx.beginPath();
         ctx.moveTo(0, h * 0.72);
@@ -853,14 +942,12 @@
         ctx.lineTo(0, h);
         ctx.closePath();
         ctx.fill();
-        // 月亮與小雪點
         ctx.fillStyle = '#FFF3B0';
         ctx.beginPath();
-        ctx.arc(w * 0.86, h * 0.16, 36, 0, Math.PI * 2);
+        ctx.arc(w * 0.86, h * 0.16, 34, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-        const snowCoords = [[0.12,0.18],[0.25,0.35],[0.42,0.14],[0.58,0.28],[0.72,0.12],[0.18,0.52],[0.65,0.48],[0.88,0.42]];
-        snowCoords.forEach(([sx, sy]) => {
+        [[0.12,0.18],[0.25,0.35],[0.42,0.14],[0.58,0.28],[0.72,0.12],[0.18,0.52],[0.65,0.48],[0.88,0.42]].forEach(([sx, sy]) => {
           ctx.beginPath();
           ctx.arc(w * sx, h * sy, 5, 0, Math.PI * 2);
           ctx.fill();
@@ -869,7 +956,6 @@
         // 草地藍天場景
         ctx.fillStyle = '#B8E4FF';
         ctx.fillRect(0, 0, w, h);
-        // 綠油油草地
         ctx.fillStyle = '#8CD964';
         ctx.beginPath();
         ctx.moveTo(0, h * 0.70);
@@ -878,7 +964,6 @@
         ctx.lineTo(0, h);
         ctx.closePath();
         ctx.fill();
-        // 兩朵白雲
         ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
         [[0.22, 0.18], [0.72, 0.22]].forEach(([cx, cy]) => {
           ctx.beginPath();
@@ -887,6 +972,52 @@
           ctx.arc(w * cx - 26, h * cy + 6, 22, 0, Math.PI * 2);
           ctx.fill();
         });
+      } else if (appState.bgStyle === 'scene_ocean') {
+        // 海底世界場景
+        const grad = ctx.createLinearGradient(0, 0, 0, h * 0.82);
+        grad.addColorStop(0, '#38B6FF');
+        grad.addColorStop(1, '#005A8D');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+        // 海底金黃沙地
+        ctx.fillStyle = '#F5D68E';
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.80);
+        ctx.quadraticCurveTo(w * 0.35, h * 0.74, w * 0.7, h * 0.81);
+        ctx.quadraticCurveTo(w * 0.88, h * 0.84, w, h * 0.78);
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        ctx.fill();
+        // 水底氣泡
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+        ctx.lineWidth = 3;
+        [[0.15,0.62,10],[0.17,0.48,7],[0.82,0.58,12],[0.80,0.42,8],[0.48,0.32,9]].forEach(([bx, by, br]) => {
+          ctx.beginPath();
+          ctx.arc(w * bx, h * by, br, 0, Math.PI * 2);
+          ctx.stroke();
+        });
+      } else if (appState.bgStyle === 'scene_space') {
+        // 星空宇宙場景
+        ctx.fillStyle = '#121633';
+        ctx.fillRect(0, 0, w, h);
+        // 閃爍小星星
+        ctx.fillStyle = '#FFF59D';
+        [[0.14,0.20,4],[0.28,0.12,3],[0.45,0.24,5],[0.64,0.15,3],[0.82,0.22,4],[0.20,0.65,3],[0.76,0.68,4],[0.52,0.78,3]].forEach(([sx, sy, sr]) => {
+          ctx.beginPath();
+          ctx.arc(w * sx, h * sy, sr, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        // 遠處星球
+        ctx.fillStyle = '#FF9E6D';
+        ctx.beginPath();
+        ctx.arc(w * 0.82, h * 0.24, 32, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#FFD180';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.ellipse(w * 0.82, h * 0.24, 52, 12, -0.3, 0, Math.PI * 2);
+        ctx.stroke();
       }
     }
 
@@ -919,16 +1050,24 @@
       ctx.lineJoin = 'round';
       ctx.lineWidth = stroke.size;
 
+      if (stroke.isNeon) {
+        ctx.shadowBlur = 16;
+        ctx.shadowColor = stroke.isRainbow ? '#FFFFFF' : stroke.color;
+      }
+
       if (stroke.isRainbow) {
         if (stroke.points.length === 1) {
+          const c = `hsl(${stroke.points[0].hue || 0}, 100%, 55%)`;
           ctx.beginPath();
           ctx.arc(stroke.points[0].x, stroke.points[0].y, stroke.size / 2, 0, Math.PI * 2);
-          ctx.fillStyle = `hsl(${stroke.points[0].hue || 0}, 95%, 50%)`;
+          ctx.fillStyle = c;
           ctx.fill();
         } else {
           for (let i = 1; i < stroke.points.length; i++) {
+            const c = `hsl(${stroke.points[i].hue || 0}, 100%, 55%)`;
             ctx.beginPath();
-            ctx.strokeStyle = `hsl(${stroke.points[i].hue || 0}, 95%, 50%)`;
+            ctx.strokeStyle = c;
+            if (stroke.isNeon) ctx.shadowColor = c;
             ctx.moveTo(stroke.points[i - 1].x, stroke.points[i - 1].y);
             ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
             ctx.stroke();
@@ -992,6 +1131,7 @@
       unlockAudioAndSpeech();
       canvas.setPointerCapture(e.pointerId);
       const pt = getCanvasPoint(e);
+      const rect = canvasWrapper.getBoundingClientRect();
 
       if (appState.mode === 'brush') {
         isDrawing = true;
@@ -1004,11 +1144,13 @@
           type: 'stroke',
           color: appState.brushColor,
           isRainbow: isRainbow,
+          isNeon: appState.isNeon,
           size: appState.brushSize,
           points: [pt]
         };
         appState.history.push(currentStroke);
         drawStrokePath(currentStroke);
+        playBrushSparkleSound(pt.y, rect.height);
       } else if (appState.mode === 'stamp') {
         isDrawing = true;
         placeStampAt(pt);
@@ -1020,6 +1162,7 @@
       if (!isDrawing) return;
       e.preventDefault();
       const pt = getCanvasPoint(e);
+      const rect = canvasWrapper.getBoundingClientRect();
 
       if (appState.mode === 'brush' && currentStroke) {
         const prev = currentStroke.points[currentStroke.points.length - 1];
@@ -1029,16 +1172,24 @@
         }
         currentStroke.points.push(pt);
 
+        const segColor = currentStroke.isRainbow ? `hsl(${pt.hue}, 100%, 55%)` : currentStroke.color;
         ctx.save();
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = currentStroke.isRainbow ? `hsl(${pt.hue}, 95%, 50%)` : currentStroke.color;
+        ctx.strokeStyle = segColor;
         ctx.lineWidth = currentStroke.size;
+        if (currentStroke.isNeon) {
+          ctx.shadowBlur = 16;
+          ctx.shadowColor = segColor;
+        }
         ctx.beginPath();
         ctx.moveTo(prev.x, prev.y);
         ctx.lineTo(pt.x, pt.y);
         ctx.stroke();
         ctx.restore();
+
+        // 一路畫畫一路發出悅耳音樂風鈴聲效
+        playBrushSparkleSound(pt.y, rect.height);
       } else if (appState.mode === 'stamp') {
         const minGap = Math.max(76, appState.stampSize * 0.85);
         const dist = Math.hypot(pt.x - lastStampPos.x, pt.y - lastStampPos.y);
@@ -1065,6 +1216,7 @@
 
         appState.mode = 'brush';
         appState.brushColor = btn.dataset.color;
+        appState.isNeon = (btn.dataset.neon === 'true');
         appState.brushName = btn.dataset.name;
         renderStampButtons();
         currentToolBanner.textContent = `🖌️ ${appState.brushName}`;
