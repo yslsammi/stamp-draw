@@ -29,62 +29,88 @@
       display: flex;
       width: 100vw;
       height: 100vh;
-      padding: 12px;
-      gap: 14px;
+      padding: 10px;
+      gap: 12px;
     }
 
     /* === 左側工具欄（畫筆 ＋ 主題分頁 ＋ 圖案蓋印）=== */
     #left-sidebar {
-      width: 245px;
-      min-width: 225px;
+      width: 248px;
+      min-width: 228px;
       background-color: #1E2532;
       border-radius: 24px;
-      padding: 12px;
+      padding: 11px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .sidebar-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
     }
 
     .sidebar-section-title {
       color: #FFD60A;
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 900;
-      text-align: center;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
-    /* 畫筆顏色按鈕列 */
+    .size-toggle-btn {
+      background-color: #323D52;
+      color: #00E5FF;
+      border: 2px solid #00E5FF;
+      border-radius: 10px;
+      padding: 4px 9px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .size-toggle-btn:active {
+      transform: scale(0.94);
+    }
+
+    /* 畫筆顏色按鈕列（含彩虹筆） */
     .brush-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
     }
 
     .brush-btn {
-      height: 48px;
-      border-radius: 14px;
+      height: 44px;
+      border-radius: 12px;
       border: 3px solid rgba(255, 255, 255, 0.3);
       background-color: #2C3545;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      padding: 0;
       transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .brush-btn .color-dot {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       border: 2px solid #FFFFFF;
+    }
+
+    .rainbow-dot {
+      background: conic-gradient(#FF2A2A, #FF9900, #FFEE00, #00D94A, #0088FF, #A64DFF, #FF2A2A);
     }
 
     .brush-btn.active {
       border-color: #FFD60A;
       background-color: #384459;
-      transform: scale(1.06);
-      box-shadow: 0 0 14px rgba(255, 214, 10, 0.75);
+      transform: scale(1.08);
+      box-shadow: 0 0 12px rgba(255, 214, 10, 0.8);
     }
 
     .divider-line {
@@ -105,12 +131,11 @@
       color: #E2E8F0;
       border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 12px;
-      padding: 7px 4px;
-      font-size: 0.88rem;
+      padding: 6px 4px;
+      font-size: 0.86rem;
       font-weight: 900;
       cursor: pointer;
       text-align: center;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     .cat-tab-btn.active {
@@ -123,7 +148,7 @@
     .stamps-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 7px;
       flex: 1;
       overflow-y: auto;
       align-content: start;
@@ -133,8 +158,8 @@
     .stamp-btn {
       background-color: #2C3545;
       border: 3px solid rgba(255, 255, 255, 0.25);
-      border-radius: 16px;
-      padding: 7px 4px;
+      border-radius: 15px;
+      padding: 6px 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -144,22 +169,22 @@
     }
 
     .stamp-btn .stamp-emoji {
-      font-size: 2.25rem;
+      font-size: 2.15rem;
       line-height: 1.1;
     }
 
     .stamp-btn .stamp-label {
       color: #FFFFFF;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 800;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .stamp-btn.active {
       border-color: #00FF66;
       background-color: #1F4732;
       transform: scale(1.04);
-      box-shadow: 0 0 16px rgba(0, 255, 102, 0.65);
+      box-shadow: 0 0 14px rgba(0, 255, 102, 0.65);
     }
 
     /* === 右側主畫板區 === */
@@ -167,41 +192,46 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       min-width: 0;
     }
 
-    /* 頂部控制欄（換畫紙底色 ＋ 還原 ＋ 清空） */
+    /* 頂部控制欄（畫紙場景 ＋ 還原 ＋ 清空 ＋ 完成啦音樂慶祝） */
     #top-toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       background-color: #FFFFFF;
       border-radius: 20px;
-      padding: 10px 18px;
+      padding: 8px 14px;
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-      gap: 12px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
     .bg-picker-group {
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 7px;
     }
 
     .bg-picker-label {
-      font-size: 1.02rem;
+      font-size: 0.96rem;
       font-weight: 900;
       color: #1E2532;
     }
 
     .bg-swatch {
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       border: 3px solid #99A3B0;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      padding: 0;
       transition: transform 0.15s ease, border-color 0.2s ease;
     }
 
@@ -212,32 +242,33 @@
     }
 
     #current-tool-banner {
-      font-size: 1.2rem;
+      font-size: 1.08rem;
       font-weight: 900;
       color: #003380;
       background: #EBF3FF;
-      padding: 8px 16px;
-      border-radius: 16px;
+      padding: 7px 14px;
+      border-radius: 14px;
       white-space: nowrap;
     }
 
     .action-btns-group {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .tool-action-btn {
       border: none;
-      border-radius: 16px;
-      padding: 10px 18px;
-      font-size: 1.08rem;
+      border-radius: 15px;
+      padding: 9px 15px;
+      font-size: 1.02rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+      white-space: nowrap;
     }
 
     .tool-action-btn:active {
@@ -252,6 +283,15 @@
     #clear-btn {
       background-color: #FF453A;
       color: #FFFFFF;
+    }
+
+    #finish-btn {
+      background: linear-gradient(135deg, #00D94A, #00A838);
+      color: #FFFFFF;
+      border: 2px solid #004D1A;
+      font-size: 1.12rem;
+      padding: 9px 18px;
+      box-shadow: 0 4px 14px rgba(0, 200, 70, 0.45);
     }
 
     /* 畫布外框 */
@@ -281,11 +321,130 @@
       color: #FFD60A;
       padding: 10px 24px;
       border-radius: 20px;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
       pointer-events: none;
       transition: opacity 0.4s ease;
       white-space: nowrap;
+    }
+
+    /* === 完成畫作音樂慶祝彈窗 === */
+    #celebrate-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: rgba(15, 22, 36, 0.78);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
+    .celebrate-card {
+      background-color: #1E2532;
+      border: 5px solid #FFD60A;
+      border-radius: 28px;
+      padding: 24px 32px;
+      max-width: 560px;
+      width: 92%;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.65);
+      animation: popIn 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.75); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .music-notes-banner {
+      font-size: 3.4rem;
+      margin-bottom: 6px;
+      animation: bounceNotes 0.9s infinite alternate ease-in-out;
+    }
+
+    @keyframes bounceNotes {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.08); }
+    }
+
+    .celebrate-title {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #FFD60A;
+      margin: 4px 0 8px 0;
+    }
+
+    .celebrate-subtitle {
+      font-size: 1.15rem;
+      color: #FFFFFF;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .song-selector-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .song-btn {
+      background-color: #2C3545;
+      color: #FFFFFF;
+      border: 3px solid #00E5FF;
+      border-radius: 16px;
+      padding: 10px 16px;
+      font-size: 1.02rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .song-btn.playing {
+      background-color: #00E5FF;
+      color: #000000;
+    }
+
+    .celebrate-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cel-btn {
+      border: none;
+      border-radius: 18px;
+      padding: 13px 22px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .cel-btn:active {
+      transform: scale(0.95);
+    }
+
+    #save-art-btn {
+      background-color: #FFD60A;
+      color: #000000;
+    }
+
+    #keep-drawing-btn {
+      background-color: #00FF66;
+      color: #000000;
+    }
+
+    /* 慶祝煙花粒子 */
+    .firework-dot {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 45;
     }
   </style>
 </head>
@@ -294,7 +453,10 @@
   <div id="app-layout">
     <!-- 左側工具欄：畫筆顏色 ＋ 主題分類 ＋ 圖案蓋印 -->
     <div id="left-sidebar">
-      <div class="sidebar-section-title">🖌️ 揀畫筆</div>
+      <div class="sidebar-header-row">
+        <span class="sidebar-section-title">🖌️ 揀畫筆</span>
+        <button type="button" class="size-toggle-btn" id="brush-size-btn">筆粗：特粗</button>
+      </div>
       <div class="brush-row" id="brush-list">
         <button type="button" class="brush-btn active" data-color="#E62E2D" data-name="紅色畫筆">
           <div class="color-dot" style="background:#E62E2D;"></div>
@@ -308,11 +470,17 @@
         <button type="button" class="brush-btn" data-color="#FFB800" data-name="黃色畫筆">
           <div class="color-dot" style="background:#FFB800;"></div>
         </button>
+        <button type="button" class="brush-btn" data-color="rainbow" data-name="彩虹變色筆" title="彩虹魔法筆">
+          <div class="color-dot rainbow-dot"></div>
+        </button>
       </div>
 
       <div class="divider-line"></div>
 
-      <div class="sidebar-section-title">🪄 揀主題圖案蓋印</div>
+      <div class="sidebar-header-row">
+        <span class="sidebar-section-title">🪄 揀圖案蓋印</span>
+        <button type="button" class="size-toggle-btn" id="stamp-size-btn">圖案：特大</button>
+      </div>
       <div class="category-tabs" id="category-tabs">
         <button type="button" class="cat-tab-btn active" data-cat="common">🌟 常用</button>
         <button type="button" class="cat-tab-btn" data-cat="christmas">🎄 聖誕</button>
@@ -327,24 +495,46 @@
     <div id="right-workspace">
       <div id="top-toolbar">
         <div class="bg-picker-group">
-          <span class="bg-picker-label">🎨 畫紙底色：</span>
-          <button type="button" class="bg-swatch active" data-bg="#FAF8F2" title="柔和米白" style="background:#FAF8F2;"></button>
-          <button type="button" class="bg-swatch" data-bg="#DCEEFF" title="護眼淺藍" style="background:#DCEEFF;"></button>
-          <button type="button" class="bg-swatch" data-bg="#FFF6CC" title="溫暖淺黃" style="background:#FFF6CC;"></button>
-          <button type="button" class="bg-swatch" data-bg="#1B2A4A" title="深藍夜空" style="background:#1B2A4A;"></button>
+          <span class="bg-picker-label">🎨 畫紙：</span>
+          <button type="button" class="bg-swatch active" data-bg="cream" title="柔和米白" style="background:#FAF8F2;"></button>
+          <button type="button" class="bg-swatch" data-bg="skyblue" title="護眼淺藍" style="background:#DCEEFF;"></button>
+          <button type="button" class="bg-swatch" data-bg="warmyellow" title="溫暖淺黃" style="background:#FFF6CC;"></button>
+          <button type="button" class="bg-swatch" data-bg="scene_xmas" title="聖誕雪夜場景" style="background:linear-gradient(180deg,#102040 65%,#EBF5FF 65%);">🎄</button>
+          <button type="button" class="bg-swatch" data-bg="scene_park" title="草地藍天場景" style="background:linear-gradient(180deg,#87CEEB 65%,#7EC850 65%);">🌳</button>
         </div>
 
-        <div id="current-tool-banner">🖌️ 正在用：紅色畫筆</div>
+        <div id="current-tool-banner">🖌️ 紅色畫筆</div>
 
         <div class="action-btns-group">
           <button type="button" class="tool-action-btn" id="undo-btn">↩️ 還原</button>
           <button type="button" class="tool-action-btn" id="clear-btn">🗑️ 清空</button>
+          <button type="button" class="tool-action-btn" id="finish-btn">🎉 完成啦！</button>
         </div>
       </div>
 
       <div id="canvas-wrapper">
         <canvas id="draw-canvas"></canvas>
-        <div id="audio-unlock-toast">👆 直接在畫板畫畫，或點左邊圖案蓋印！</div>
+        <div id="audio-unlock-toast">👆 直接在畫板畫畫，或點左邊圖案蓋印，畫好按「🎉 完成啦！」聽音樂！</div>
+
+        <!-- 完成畫作音樂慶祝遮罩 -->
+        <div id="celebrate-overlay">
+          <div class="celebrate-card">
+            <div class="music-notes-banner">🎶 🎨 🎵</div>
+            <div class="celebrate-title">哇！畫得好靚呀！</div>
+            <div class="celebrate-subtitle">點選下面音樂掣，一齊聽住音樂欣賞你嘅作品：</div>
+
+            <div class="song-selector-row">
+              <button type="button" class="song-btn" data-song="twinkle">🎵 播《小星星》</button>
+              <button type="button" class="song-btn" data-song="jingle">🎄 播《聖誕鈴聲》</button>
+              <button type="button" class="song-btn" data-song="happy">🎉 播《快樂頌》</button>
+            </div>
+
+            <div class="celebrate-actions">
+              <button type="button" class="cel-btn" id="save-art-btn">📸 儲存畫作相片</button>
+              <button type="button" class="cel-btn" id="keep-drawing-btn">🖌️ 繼續畫畫</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -400,6 +590,7 @@
     const currentToolBanner = document.getElementById('current-tool-banner');
     const unlockToast = document.getElementById('audio-unlock-toast');
     const stampsListEl = document.getElementById('stamps-list');
+    const celebrateOverlay = document.getElementById('celebrate-overlay');
 
     // === 畫板狀態 ===
     const appState = {
@@ -407,22 +598,24 @@
       activeCategory: 'common',
       brushColor: '#E62E2D',
       brushName: '紅色畫筆',
-      brushSize: 18,
+      brushSize: 22, // 22 (特粗) | 10 (普通)
       stampEmoji: '⭐',
       stampName: '星星',
-      stampSize: 96,
-      bgColor: '#FAF8F2',
+      stampSize: 108, // 108 (特大) | 66 (標準)
+      bgStyle: 'cream',
       history: []
     };
 
     let isDrawing = false;
     let currentStroke = null;
+    let rainbowHue = 0;
     let lastStampTime = 0;
     let lastStampPos = { x: -999, y: -999 };
     let audioUnlocked = false;
 
-    // === Web Audio API 輕快音效 ===
+    // === Web Audio API 音效與童趣旋律播放器 ===
     let audioCtx = null;
+    let songTimers = [];
 
     function unlockAudioAndSpeech() {
       if (!audioCtx) {
@@ -440,6 +633,27 @@
       }
     }
 
+    function stopMelody() {
+      songTimers.forEach(t => clearTimeout(t));
+      songTimers = [];
+      document.querySelectorAll('.song-btn').forEach(b => b.classList.remove('playing'));
+    }
+
+    function playNoteTone(freq, duration = 0.28, waveType = 'triangle', vol = 0.22) {
+      if (!audioCtx || freq <= 0) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = waveType;
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(vol, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + duration);
+    }
+
     function playStampPopSound() {
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
@@ -454,6 +668,60 @@
       gain.connect(audioCtx.destination);
       osc.start(now);
       osc.stop(now + 0.18);
+    }
+
+    // 內置三首輕快童趣旋律（音高頻率 Hz 與拍子毫秒）
+    const NOTES = {
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23,
+      G4: 392.00, A4: 440.00, B4: 493.88, C5: 523.25,
+      D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99
+    };
+
+    const SONGS = {
+      twinkle: [
+        [NOTES.C4, 340], [NOTES.C4, 340], [NOTES.G4, 340], [NOTES.G4, 340],
+        [NOTES.A4, 340], [NOTES.A4, 340], [NOTES.G4, 650],
+        [NOTES.F4, 340], [NOTES.F4, 340], [NOTES.E4, 340], [NOTES.E4, 340],
+        [NOTES.D4, 340], [NOTES.D4, 340], [NOTES.C4, 680]
+      ],
+      jingle: [
+        [NOTES.E4, 280], [NOTES.E4, 280], [NOTES.E4, 540],
+        [NOTES.E4, 280], [NOTES.E4, 280], [NOTES.E4, 540],
+        [NOTES.E4, 280], [NOTES.G4, 280], [NOTES.C4, 360], [NOTES.D4, 240],
+        [NOTES.E4, 720],
+        [NOTES.F4, 280], [NOTES.F4, 280], [NOTES.F4, 340], [NOTES.F4, 240],
+        [NOTES.F4, 280], [NOTES.E4, 280], [NOTES.E4, 280], [NOTES.E4, 280],
+        [NOTES.G4, 280], [NOTES.G4, 280], [NOTES.F4, 280], [NOTES.D4, 280],
+        [NOTES.C4, 700]
+      ],
+      happy: [
+        [NOTES.E4, 300], [NOTES.E4, 300], [NOTES.F4, 300], [NOTES.G4, 300],
+        [NOTES.G4, 300], [NOTES.F4, 300], [NOTES.E4, 300], [NOTES.D4, 300],
+        [NOTES.C4, 300], [NOTES.C4, 300], [NOTES.D4, 300], [NOTES.E4, 300],
+        [NOTES.E4, 440], [NOTES.D4, 200], [NOTES.D4, 620]
+      ]
+    };
+
+    function playSong(songKey) {
+      unlockAudioAndSpeech();
+      stopMelody();
+      const btn = document.querySelector(`.song-btn[data-song="${songKey}"]`);
+      if (btn) btn.classList.add('playing');
+
+      const seq = SONGS[songKey] || SONGS.twinkle;
+      let elapsed = 80;
+      seq.forEach(([freq, dur]) => {
+        const t = setTimeout(() => {
+          playNoteTone(freq, (dur / 1000) * 0.92, 'triangle', 0.24);
+        }, elapsed);
+        songTimers.push(t);
+        elapsed += dur;
+      });
+
+      const endTimer = setTimeout(() => {
+        if (btn) btn.classList.remove('playing');
+      }, elapsed + 100);
+      songTimers.push(endTimer);
     }
 
     // === 廣東話語音提示 ===
@@ -474,8 +742,11 @@
       window.speechSynthesis.onvoiceschanged = loadCantoneseVoice;
     }
 
-    function speakCantonese(text) {
-      if (!('speechSynthesis' in window) || !text) return;
+    function speakCantonese(text, onFinished = null) {
+      if (!('speechSynthesis' in window) || !text) {
+        if (onFinished) onFinished();
+        return;
+      }
       if (speechTimer) clearTimeout(speechTimer);
       window.speechSynthesis.cancel();
       speechTimer = setTimeout(() => {
@@ -485,6 +756,9 @@
         if (cantoneseVoice) utter.voice = cantoneseVoice;
         utter.rate = 0.88;
         utter.pitch = 1.15;
+        if (onFinished) {
+          utter.onend = onFinished;
+        }
         window.speechSynthesis.speak(utter);
       }, 50);
     }
@@ -511,7 +785,7 @@
           appState.stampEmoji = item.emoji;
           appState.stampName = item.name;
           renderStampButtons();
-          currentToolBanner.textContent = `${item.emoji} 蓋印圖案：${item.name}`;
+          currentToolBanner.textContent = `${item.emoji} ${item.name}`;
           speakCantonese(item.name);
         });
 
@@ -530,7 +804,92 @@
       });
     });
 
-    // === 畫布尺寸自適應與重繪 ===
+    // === 筆粗與圖案大細一按切換 ===
+    const brushSizeBtn = document.getElementById('brush-size-btn');
+    brushSizeBtn.addEventListener('click', () => {
+      unlockAudioAndSpeech();
+      if (appState.brushSize === 22) {
+        appState.brushSize = 10;
+        brushSizeBtn.textContent = '筆粗：普通';
+      } else {
+        appState.brushSize = 22;
+        brushSizeBtn.textContent = '筆粗：特粗';
+      }
+    });
+
+    const stampSizeBtn = document.getElementById('stamp-size-btn');
+    stampSizeBtn.addEventListener('click', () => {
+      unlockAudioAndSpeech();
+      if (appState.stampSize === 108) {
+        appState.stampSize = 68;
+        stampSizeBtn.textContent = '圖案：標準';
+      } else {
+        appState.stampSize = 108;
+        stampSizeBtn.textContent = '圖案：特大';
+      }
+    });
+
+    // === 畫布底色與情境背景繪製 ===
+    function drawBackgroundLayer(w, h) {
+      if (appState.bgStyle === 'cream') {
+        ctx.fillStyle = '#FAF8F2';
+        ctx.fillRect(0, 0, w, h);
+      } else if (appState.bgStyle === 'skyblue') {
+        ctx.fillStyle = '#DCEEFF';
+        ctx.fillRect(0, 0, w, h);
+      } else if (appState.bgStyle === 'warmyellow') {
+        ctx.fillStyle = '#FFF6CC';
+        ctx.fillRect(0, 0, w, h);
+      } else if (appState.bgStyle === 'scene_xmas') {
+        // 聖誕雪地夜空場景
+        ctx.fillStyle = '#132442';
+        ctx.fillRect(0, 0, w, h);
+        // 柔和雪地斜坡
+        ctx.fillStyle = '#EAF4FC';
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.72);
+        ctx.quadraticCurveTo(w * 0.5, h * 0.64, w, h * 0.74);
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        ctx.fill();
+        // 月亮與小雪點
+        ctx.fillStyle = '#FFF3B0';
+        ctx.beginPath();
+        ctx.arc(w * 0.86, h * 0.16, 36, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+        const snowCoords = [[0.12,0.18],[0.25,0.35],[0.42,0.14],[0.58,0.28],[0.72,0.12],[0.18,0.52],[0.65,0.48],[0.88,0.42]];
+        snowCoords.forEach(([sx, sy]) => {
+          ctx.beginPath();
+          ctx.arc(w * sx, h * sy, 5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      } else if (appState.bgStyle === 'scene_park') {
+        // 草地藍天場景
+        ctx.fillStyle = '#B8E4FF';
+        ctx.fillRect(0, 0, w, h);
+        // 綠油油草地
+        ctx.fillStyle = '#8CD964';
+        ctx.beginPath();
+        ctx.moveTo(0, h * 0.70);
+        ctx.quadraticCurveTo(w * 0.45, h * 0.63, w, h * 0.72);
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+        ctx.fill();
+        // 兩朵白雲
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        [[0.22, 0.18], [0.72, 0.22]].forEach(([cx, cy]) => {
+          ctx.beginPath();
+          ctx.arc(w * cx, h * cy, 28, 0, Math.PI * 2);
+          ctx.arc(w * cx + 26, h * cy + 4, 22, 0, Math.PI * 2);
+          ctx.arc(w * cx - 26, h * cy + 6, 22, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+    }
+
     function resizeCanvas() {
       const rect = canvasWrapper.getBoundingClientRect();
       const dpr = window.devicePixelRatio || 1;
@@ -542,8 +901,7 @@
 
     function redrawAll() {
       const rect = canvasWrapper.getBoundingClientRect();
-      ctx.fillStyle = appState.bgColor;
-      ctx.fillRect(0, 0, rect.width, rect.height);
+      drawBackgroundLayer(rect.width, rect.height);
 
       for (const item of appState.history) {
         if (item.type === 'stroke') {
@@ -559,20 +917,37 @@
       ctx.save();
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = stroke.color;
       ctx.lineWidth = stroke.size;
 
-      ctx.beginPath();
-      if (stroke.points.length === 1) {
-        ctx.arc(stroke.points[0].x, stroke.points[0].y, stroke.size / 2, 0, Math.PI * 2);
-        ctx.fillStyle = stroke.color;
-        ctx.fill();
-      } else {
-        ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
-        for (let i = 1; i < stroke.points.length; i++) {
-          ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+      if (stroke.isRainbow) {
+        if (stroke.points.length === 1) {
+          ctx.beginPath();
+          ctx.arc(stroke.points[0].x, stroke.points[0].y, stroke.size / 2, 0, Math.PI * 2);
+          ctx.fillStyle = `hsl(${stroke.points[0].hue || 0}, 95%, 50%)`;
+          ctx.fill();
+        } else {
+          for (let i = 1; i < stroke.points.length; i++) {
+            ctx.beginPath();
+            ctx.strokeStyle = `hsl(${stroke.points[i].hue || 0}, 95%, 50%)`;
+            ctx.moveTo(stroke.points[i - 1].x, stroke.points[i - 1].y);
+            ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+            ctx.stroke();
+          }
         }
-        ctx.stroke();
+      } else {
+        ctx.strokeStyle = stroke.color;
+        ctx.beginPath();
+        if (stroke.points.length === 1) {
+          ctx.arc(stroke.points[0].x, stroke.points[0].y, stroke.size / 2, 0, Math.PI * 2);
+          ctx.fillStyle = stroke.color;
+          ctx.fill();
+        } else {
+          ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+          for (let i = 1; i < stroke.points.length; i++) {
+            ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+          }
+          ctx.stroke();
+        }
       }
       ctx.restore();
     }
@@ -620,9 +995,15 @@
 
       if (appState.mode === 'brush') {
         isDrawing = true;
+        const isRainbow = (appState.brushColor === 'rainbow');
+        if (isRainbow) {
+          pt.hue = rainbowHue;
+          rainbowHue = (rainbowHue + 10) % 360;
+        }
         currentStroke = {
           type: 'stroke',
           color: appState.brushColor,
+          isRainbow: isRainbow,
           size: appState.brushSize,
           points: [pt]
         };
@@ -642,12 +1023,16 @@
 
       if (appState.mode === 'brush' && currentStroke) {
         const prev = currentStroke.points[currentStroke.points.length - 1];
+        if (currentStroke.isRainbow) {
+          pt.hue = rainbowHue;
+          rainbowHue = (rainbowHue + 8) % 360;
+        }
         currentStroke.points.push(pt);
 
         ctx.save();
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = currentStroke.color;
+        ctx.strokeStyle = currentStroke.isRainbow ? `hsl(${pt.hue}, 95%, 50%)` : currentStroke.color;
         ctx.lineWidth = currentStroke.size;
         ctx.beginPath();
         ctx.moveTo(prev.x, prev.y);
@@ -655,8 +1040,9 @@
         ctx.stroke();
         ctx.restore();
       } else if (appState.mode === 'stamp') {
+        const minGap = Math.max(76, appState.stampSize * 0.85);
         const dist = Math.hypot(pt.x - lastStampPos.x, pt.y - lastStampPos.y);
-        if (dist >= 88 && Date.now() - lastStampTime >= 140) {
+        if (dist >= minGap && Date.now() - lastStampTime >= 140) {
           placeStampAt(pt);
         }
       }
@@ -681,19 +1067,19 @@
         appState.brushColor = btn.dataset.color;
         appState.brushName = btn.dataset.name;
         renderStampButtons();
-        currentToolBanner.textContent = `🖌️ 正在用：${appState.brushName}`;
+        currentToolBanner.textContent = `🖌️ ${appState.brushName}`;
         speakCantonese(appState.brushName);
       });
     });
 
-    // === 頂部畫紙底色切換 ===
+    // === 頂部畫紙場景切換 ===
     document.querySelectorAll('.bg-swatch').forEach(swatch => {
       swatch.addEventListener('click', () => {
         unlockAudioAndSpeech();
         document.querySelectorAll('.bg-swatch').forEach(s => s.classList.remove('active'));
         swatch.classList.add('active');
 
-        appState.bgColor = swatch.dataset.bg;
+        appState.bgStyle = swatch.dataset.bg;
         redrawAll();
       });
     });
@@ -713,6 +1099,82 @@
       appState.history = [];
       redrawAll();
       speakCantonese('畫板清空啦！');
+    });
+
+    // === 🎉「完成啦！」音樂慶祝與煙花 ===
+    function spawnCelebrationFireworks() {
+      const rect = canvasWrapper.getBoundingClientRect();
+      const colors = ['#FFD60A', '#00FF66', '#FF3366', '#00E5FF', '#FF9900'];
+      const centers = [
+        [rect.width * 0.25, rect.height * 0.35],
+        [rect.width * 0.75, rect.height * 0.35],
+        [rect.width * 0.50, rect.height * 0.25]
+      ];
+
+      centers.forEach(([cx, cy], burstIdx) => {
+        setTimeout(() => {
+          for (let i = 0; i < 16; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'firework-dot';
+            const size = 12 + Math.random() * 12;
+            dot.style.width = `${size}px`;
+            dot.style.height = `${size}px`;
+            dot.style.backgroundColor = colors[(i + burstIdx) % colors.length];
+            dot.style.left = `${cx}px`;
+            dot.style.top = `${cy}px`;
+            canvasWrapper.appendChild(dot);
+
+            const angle = (Math.PI * 2 * i) / 16;
+            const dist = 80 + Math.random() * 130;
+            const tx = Math.cos(angle) * dist;
+            const ty = Math.sin(angle) * dist;
+
+            dot.animate([
+              { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+              { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0.2)`, opacity: 0 }
+            ], {
+              duration: 750,
+              easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+            }).onfinish = () => dot.remove();
+          }
+        }, burstIdx * 240);
+      });
+    }
+
+    document.getElementById('finish-btn').addEventListener('click', () => {
+      unlockAudioAndSpeech();
+      celebrateOverlay.style.display = 'flex';
+      spawnCelebrationFireworks();
+      if (navigator.vibrate) navigator.vibrate([60, 50, 80]);
+
+      const defaultSong = (appState.activeCategory === 'christmas' || appState.bgStyle === 'scene_xmas')
+        ? 'jingle'
+        : 'twinkle';
+
+      speakCantonese('哇！畫得好靚呀！你係小畫家！', () => {
+        if (celebrateOverlay.style.display === 'flex') {
+          playSong(defaultSong);
+        }
+      });
+    });
+
+    document.querySelectorAll('.song-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        playSong(btn.dataset.song);
+      });
+    });
+
+    document.getElementById('save-art-btn').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `我的畫作_${new Date().toISOString().slice(0, 10)}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      speakCantonese('畫作儲存好啦！');
+    });
+
+    document.getElementById('keep-drawing-btn').addEventListener('click', () => {
+      stopMelody();
+      celebrateOverlay.style.display = 'none';
     });
 
     window.addEventListener('resize', resizeCanvas);
